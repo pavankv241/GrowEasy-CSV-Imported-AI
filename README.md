@@ -8,7 +8,7 @@ An intelligent CSV importer that maps arbitrary spreadsheet formats to GrowEasy 
 - **Client-side preview** — parse and review data before any AI processing
 - **Confirm-to-import** flow — AI runs only after user confirmation
 - **AI field mapping** — handles Facebook leads, Google Ads, Excel exports, CRM dumps, and custom spreadsheets
-- **Batch processing** with automatic retry on failed AI batches
+- **Batch processing** with retry on API rate limits
 - **Virtualized tables** for smooth scrolling on large files
 - **Dark mode** toggle
 - **Skipped record tracking** — rows without email or mobile are reported with reasons
@@ -133,6 +133,63 @@ npm run dev:frontend  # port 3000
 - **data_source:** `leads_on_demand`, `meridian_tower`, `eden_park`, `varah_swamy`, `sarjapur_plots`
 
 Records without email **and** mobile are skipped.
+
+## Edge Case Handling
+
+Edge cases are handled at three layers: upload validation, AI extraction, and post-processing normalization.
+
+### Upload & CSV parsing
+
+| Edge case | Handling |
+| --------- | -------- |
+| Non-CSV file | Rejected on frontend and backend |
+| File over 10MB | Rejected with clear error message |
+| Empty CSV (no data rows) | Blocked before AI runs |
+| Malformed quotes / fields | PapaParse critical errors shown to user |
+| Messy / varying column names | Headers trimmed; AI maps columns dynamically |
+| Empty cells | Normalized to empty string `""` |
+
+### AI extraction & validation
+
+| Edge case | Handling |
+| --------- | -------- |
+| Different CSV layouts (Facebook, Google Ads, Excel exports) | No fixed schema — AI infers field mapping |
+| AI returns flat JSON (Groq/Llama) | Response normalizer wraps into nested `record` shape |
+| AI wraps JSON in markdown fences | Fences stripped before parsing |
+| Missing row in AI response | Batch validation fails with clear error |
+| Invalid `crm_status` or `data_source` | Coerced to `""` if not in allowed enum |
+| Row with no email and no mobile | Skipped with reason in skipped records table |
+| Email-only row (no phone) | Imported successfully |
+| API rate limit (429) | Single retry with backoff delay |
+
+### Post-processing (code-enforced rules)
+
+| Rule | Handling |
+| ---- | -------- |
+| `created_at` parseable by `new Date()` | Normalized via `normalizeCreatedAt()` (ISO + DD/MM/YYYY) |
+| Multiple emails in one field | First → `email`, extras → `crm_note` |
+| Multiple mobile numbers | First → `mobile`, extras → `crm_note` |
+| `lead_owner` email | Not duplicated as an extra email |
+| Mapped columns (First Name, Status, etc.) | Not duplicated into `crm_note` |
+| Odd phone formats from AI | `normalizePhoneFields()` fixes common mistakes |
+| Allowed status / data source values | Validated with Zod and normalized |
+
+### Frontend UX edge cases
+
+| Edge case | Handling |
+| --------- | -------- |
+| CSV parse failure | Error banner, user stays on upload step |
+| Backend / AI failure | Error banner, user returns to preview |
+| Large result sets | Virtualized table with horizontal and vertical scroll |
+| Truncated long values | Wider columns for key fields + hover tooltip |
+
+### Sample test cases
+
+Use `test-import.csv` in the project root to verify:
+
+- **5 imported** — varied column names mapped to CRM fields
+- **1 skipped** — row with no email and no phone
+- **Mixed statuses** — Interested → `GOOD_LEAD_FOLLOW_UP`, Closed Won → `SALE_DONE`, etc.
 
 ## Testing
 
