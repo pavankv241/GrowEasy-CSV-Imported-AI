@@ -1,0 +1,5 @@
+Lead Created Time,First Name,Last Name,Work Email,Mobile,Company Name,City,State/Region,Country,Owner Email,Status,Comments,Source,Property Ready
+2026-05-13 14:20:48,John,Doe,john.doe@example.com,9876543210,GrowEasy,Mumbai,Maharashtra,India,test@gmail.com,Good Lead,Client is asking to reschedule demo,leads_on_demand,
+2026-05-13 14:25:30,Sarah,Johnson,sarah.johnson@example.com,9876543211,Tech Solutions,Bangalore,Karnataka,India,test@gmail.com,Did Not Connect,"Person was busy, will try again next week",,
+2026-05-13 14:30:15,Rajesh,Patel,rajesh.patel@example.com,9876543212,Startup Inc,Delhi,Delhi,India,test@gmail.com,Bad Lead,Not interested in our services,meridian_tower,
+2026-05-13 14:35:22,Priya,Singh,priya.singh@example.com,9876543213,Enterprise Corp,Pune,Maharashtra,India,test@gmail.com,Sale Done,"Deal closed, onboarding in progress",eden_park,2027-Q1

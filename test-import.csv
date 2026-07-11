@@ -1,0 +1,7 @@
+Lead Created,First Name,Last Name,Work Email,Mobile,Company,City,State,Country,Owner,Status,Comments,Source,Property Ready
+2026-05-13 14:20:48,John,Doe,john.doe@example.com,9876543210,GrowEasy,Mumbai,Maharashtra,India,test@gmail.com,Interested,Client wants demo next week,leads_on_demand,
+2026-05-13 14:25:30,Sarah,Johnson,sarah.j@example.com,9876543211,Tech Solutions,Bangalore,Karnataka,India,test@gmail.com,No Answer,Person was busy - will call again,,
+2026-05-13 14:30:15,Rajesh,Patel,rajesh@startup.in,9876543212,Startup Inc,Delhi,Delhi,India,test@gmail.com,Not Interested,Not looking for property,meridian_tower,
+2026-05-13 14:35:22,Priya,Singh,priya.singh@enterprise.com,9876543213,Enterprise Corp,Pune,Maharashtra,India,test@gmail.com,Closed Won,Deal closed - onboarding started,eden_park,2027-Q1
+2026-05-14 09:00:00,,,Empty Lead,,No Contact Co,Chennai,Tamil Nadu,India,,,No email or phone - should be skipped,,
+2026-05-14 10:00:00,Jane,Doe,jane@example.com,,Solo Inc,Chennai,Tamil Nadu,India,test@gmail.com,Follow Up,Only email - no phone number,,
