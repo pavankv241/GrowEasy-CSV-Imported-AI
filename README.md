@@ -26,12 +26,18 @@ An intelligent CSV importer that maps arbitrary spreadsheet formats to GrowEasy 
 
 ```
 GrowEasy/
-├── backend/          # Express API — CSV parse + AI extraction
-├── frontend/         # Next.js web app
+├── backend/          # Express API — see backend/README.md
+├── frontend/         # Next.js web app — see frontend/README.md
 ├── sample-data/      # Test CSV files
+├── test-import.csv   # Quick test file (5 import, 1 skip)
 ├── docker-compose.yml
 └── README.md
 ```
+
+Edge case handling is documented in:
+- [Root README — Edge Case Handling](./README.md#edge-case-handling)
+- [Frontend README](./frontend/README.md)
+- [Backend README](./backend/README.md)
 
 ## Prerequisites
 
@@ -45,8 +51,8 @@ GrowEasy/
 ### 1. Clone and install
 
 ```bash
-git clone <your-repo-url>
-cd GrowEasy
+git clone https://github.com/pavankv241/GrowEasy-CSV-Imported-AI.git
+cd GrowEasy-CSV-Imported-AI
 npm run install:all
 ```
 
@@ -225,8 +231,8 @@ docker compose up --build
 ## Submission Checklist
 
 - [ ] Hosted application URL
-- [ ] Public GitHub repository
-- [ ] README with setup instructions
+- [x] Public GitHub repository — https://github.com/pavankv241/GrowEasy-CSV-Imported-AI
+- [x] README with setup instructions
 - [ ] Position applied for (Intern / Full-Time)
 - [ ] Email to varun@groweasy.ai
 

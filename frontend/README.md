@@ -1,30 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GrowEasy CSV Importer — Frontend
 
-## Getting Started
+Next.js web app for the GrowEasy AI-powered CSV importer assignment.
 
-First, run the development server:
+## Setup
 
 ```bash
+cp .env.local.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_API_URL` to your backend URL (default `http://localhost:4000`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## User flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Upload** — drag & drop or file picker
+2. **Preview** — client-side CSV parse (no AI yet)
+3. **Confirm Import** — calls `POST /api/extract`
+4. **Results** — imported + skipped tables with counts
 
-## Learn More
+## Edge cases handled (frontend)
 
-To learn more about Next.js, take a look at the following resources:
+| Edge case | Implementation |
+| --------- | -------------- |
+| Non-CSV file | `FileUpload.tsx` — rejects non-`.csv` files |
+| File over 10MB | Size check before parse |
+| Empty CSV | `page.tsx` — "CSV file contains no data rows" |
+| Malformed CSV | PapaParse critical errors shown in error banner |
+| Parse in progress | Upload disabled + "Parsing CSV..." state |
+| API / AI failure | Error banner; user returned to preview step |
+| Large tables | `DataTable.tsx` — `@tanstack/react-virtual` virtualization |
+| Sticky headers + scroll | Horizontal and vertical scroll with fixed column widths |
+| Truncated cell text | Wider columns for `crm_note`, `crm_status`, etc. + hover tooltip |
+| Dark mode | `ThemeProvider.tsx` — persisted preference |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key files
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/page.tsx              # 4-step import flow
+├── components/
+│   ├── FileUpload.tsx        # Drag & drop upload
+│   ├── DataTable.tsx         # Virtualized preview/results table
+│   ├── ResultsSummary.tsx    # Imported / skipped counts
+│   └── ImportProgress.tsx    # AI processing state
+└── lib/
+    ├── csv.ts                # Client-side PapaParse
+    └── api.ts                # Backend API client
+```
+
+## Deploy (Vercel)
+
+- Root directory: `frontend`
+- Env: `NEXT_PUBLIC_API_URL=https://your-backend.onrender.com`
