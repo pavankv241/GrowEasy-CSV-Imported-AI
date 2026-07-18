@@ -48,7 +48,7 @@ export function DataTable({
 
   if (rows.length === 0) {
     return (
-      <div className="rounded-xl border border-zinc-200 bg-zinc-50 px-6 py-12 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400">
+      <div className="border border-line bg-surface px-6 py-12 text-center text-sm text-muted">
         {emptyMessage}
       </div>
     );
@@ -59,16 +59,11 @@ export function DataTable({
   const tableWidth = INDEX_COL_WIDTH + columnWidths.reduce((sum, w) => sum + w, 0);
 
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-700",
-        maxHeight
-      )}
-    >
+    <div className={cn("overflow-hidden border border-line bg-surface-raised", maxHeight)}>
       <div ref={parentRef} className="h-full overflow-auto">
         <div style={{ width: tableWidth, minWidth: tableWidth }}>
           <div
-            className="sticky top-0 z-10 grid border-b border-zinc-200 bg-zinc-100 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+            className="sticky top-0 z-10 grid border-b border-line bg-surface font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-muted"
             style={{ gridTemplateColumns: gridTemplate, width: tableWidth }}
           >
             <div className="px-3 py-3">#</div>
@@ -91,7 +86,7 @@ export function DataTable({
               return (
                 <div
                   key={rowKey(virtualRow.index)}
-                  className="grid border-b border-zinc-100 text-sm hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900/50"
+                  className="grid border-b border-line/60 text-sm transition-colors hover:bg-surface"
                   style={{
                     position: "absolute",
                     top: 0,
@@ -102,14 +97,14 @@ export function DataTable({
                     gridTemplateColumns: gridTemplate,
                   }}
                 >
-                  <div className="flex items-center px-3 text-xs text-zinc-400">
+                  <div className="flex items-center px-3 font-mono text-[11px] text-muted">
                     {virtualRow.index + 1}
                   </div>
                   {headers.map((header) => (
                     <div
                       key={header}
                       className={cn(
-                        "flex items-center px-3 text-zinc-700 dark:text-zinc-300",
+                        "flex items-center px-3 text-ink/90",
                         header === "crm_note" || header === "description"
                           ? "line-clamp-2 whitespace-normal text-xs leading-snug"
                           : "truncate"

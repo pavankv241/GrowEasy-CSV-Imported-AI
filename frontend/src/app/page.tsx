@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle,
-  RotateCcw,
-  Sparkles,
-} from "lucide-react";
 import { useCallback, useState } from "react";
 import { DataTable } from "@/components/DataTable";
 import { FileUpload } from "@/components/FileUpload";
@@ -21,7 +14,7 @@ import type { AppStep, ImportResult, ParsedCsv } from "@/types/crm";
 const STEPS: { key: AppStep; label: string }[] = [
   { key: "upload", label: "Upload" },
   { key: "preview", label: "Preview" },
-  { key: "processing", label: "AI Extract" },
+  { key: "processing", label: "Extract" },
   { key: "results", label: "Results" },
 ];
 
@@ -77,93 +70,98 @@ function ImporterApp() {
   const stepIndex = STEPS.findIndex((s) => s.key === step);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <div className="ge-shell flex min-h-screen flex-col">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Step indicator */}
-        <nav className="mb-8 flex items-center justify-center gap-2">
-          {STEPS.map((s, i) => (
-            <div key={s.key} className="flex items-center gap-2">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        {step !== "upload" && (
+          <nav className="mb-8 animate-rise">
+            <ol className="flex flex-wrap items-center gap-x-1 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+              {STEPS.map((s, i) => (
+                <li key={s.key} className="flex items-center gap-1">
+                  <span className={i <= stepIndex ? "text-pine" : ""}>
+                    {String(i + 1).padStart(2, "0")} {s.label}
+                  </span>
+                  {i < STEPS.length - 1 && (
+                    <span className="mx-2 text-line" aria-hidden>
+                      /
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <div className="mt-3 h-px w-full overflow-hidden bg-line">
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition ${
-                  i <= stepIndex
-                    ? "bg-emerald-600 text-white"
-                    : "bg-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
-                }`}
-              >
-                {i < stepIndex ? <CheckCircle className="h-4 w-4" /> : i + 1}
-              </div>
-              <span
-                className={`hidden text-sm sm:inline ${
-                  i <= stepIndex
-                    ? "font-medium text-zinc-900 dark:text-zinc-100"
-                    : "text-zinc-400"
-                }`}
-              >
-                {s.label}
-              </span>
-              {i < STEPS.length - 1 && (
-                <div className="mx-1 h-px w-8 bg-zinc-200 dark:bg-zinc-700" />
-              )}
+                className="h-full bg-pine transition-all duration-500 ease-out"
+                style={{ width: `${((stepIndex + 1) / STEPS.length) * 100}%` }}
+              />
             </div>
-          ))}
-        </nav>
+          </nav>
+        )}
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-400">
+          <div className="mb-6 border border-danger/30 bg-danger-soft px-4 py-3 text-sm text-danger animate-rise">
             {error}
           </div>
         )}
 
-        {/* Step 1: Upload */}
         {step === "upload" && (
-          <section className="mx-auto max-w-2xl">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                Upload your CSV
-              </h2>
-              <p className="mt-2 text-zinc-500 dark:text-zinc-400">
-                Any format works — our AI maps columns to GrowEasy CRM fields
+          <section className="mx-auto max-w-2xl pt-6 sm:pt-12">
+            <div className="mb-10 text-center">
+              <p className="animate-rise font-mono text-[11px] uppercase tracking-[0.22em] text-moss">
+                Lead import tool
+              </p>
+              <h1 className="animate-rise-delay mt-4 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
+                GrowEasy
+              </h1>
+              <div className="mx-auto mt-5 h-px w-24 origin-center scale-x-100 bg-ember animate-draw" />
+              <p className="animate-rise-delay-2 mx-auto mt-6 max-w-md text-base leading-relaxed text-muted">
+                Drop any spreadsheet. AI maps columns to your CRM lead fields —
+                then you confirm before anything is imported.
               </p>
             </div>
-            <FileUpload onFileSelect={handleFileSelect} disabled={isParsing} />
-            {isParsing && (
-              <p className="mt-4 text-center text-sm text-zinc-500">Parsing CSV...</p>
-            )}
+            <div className="animate-rise-delay-2">
+              <FileUpload onFileSelect={handleFileSelect} disabled={isParsing} />
+              {isParsing && (
+                <p className="mt-4 text-center font-mono text-xs tracking-wide text-muted">
+                  Parsing CSV…
+                </p>
+              )}
+            </div>
           </section>
         )}
 
-        {/* Step 2: Preview */}
         {step === "preview" && parsedCsv && (
-          <section className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <section className="space-y-6 animate-rise">
+            <div className="flex flex-col gap-5 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                  Preview: {parsedCsv.fileName}
+                <h2 className="font-display text-3xl font-medium tracking-tight text-ink">
+                  Preview
                 </h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  {parsedCsv.totalRows} rows · {parsedCsv.headers.length} columns — no AI
-                  processing yet
+                <p className="mt-2 text-sm text-muted">
+                  <span className="font-medium text-ink">{parsedCsv.fileName}</span>
+                  <span className="mx-2 text-line">·</span>
+                  {parsedCsv.totalRows} rows
+                  <span className="mx-2 text-line">·</span>
+                  {parsedCsv.headers.length} columns
+                  <span className="mx-2 text-line">·</span>
+                  no AI yet
                 </p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  className="border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-ink transition hover:border-muted"
                 >
-                  <ArrowLeft className="h-4 w-4" />
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirmImport}
-                  className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-emerald-600/25 transition hover:bg-emerald-700"
+                  className="bg-ember px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ember-deep"
                 >
-                  <Sparkles className="h-4 w-4" />
-                  Confirm Import
-                  <ArrowRight className="h-4 w-4" />
+                  Confirm import
                 </button>
               </div>
             </div>
@@ -171,28 +169,25 @@ function ImporterApp() {
           </section>
         )}
 
-        {/* Step 3: Processing */}
         {step === "processing" && <ImportProgress />}
 
-        {/* Step 4: Results */}
         {step === "results" && result && parsedCsv && (
-          <section className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <section className="space-y-6 animate-rise">
+            <div className="flex flex-col gap-5 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                  Import Complete
+                <h2 className="font-display text-3xl font-medium tracking-tight text-ink">
+                  Import complete
                 </h2>
-                <p className="mt-1 text-sm text-zinc-500">
-                  AI-mapped CRM records ready for GrowEasy
+                <p className="mt-2 text-sm text-muted">
+                  Mapped CRM records ready for GrowEasy
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                className="border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-ink transition hover:border-muted"
               >
-                <RotateCcw className="h-4 w-4" />
-                Import Another File
+                Import another file
               </button>
             </div>
             <ResultsSummary result={result} fileName={parsedCsv.fileName} />
@@ -200,8 +195,8 @@ function ImporterApp() {
         )}
       </main>
 
-      <footer className="mt-auto border-t border-zinc-200 py-6 text-center text-xs text-zinc-400 dark:border-zinc-800">
-        GrowEasy CSV Importer · Assignment Submission
+      <footer className="border-t border-line/70 py-5 text-center font-mono text-[11px] tracking-[0.12em] text-muted">
+        GrowEasy · CSV Importer
       </footer>
     </div>
   );

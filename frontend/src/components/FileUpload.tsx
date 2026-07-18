@@ -1,6 +1,5 @@
 "use client";
 
-import { FileSpreadsheet, Upload, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -65,13 +64,20 @@ export function FileUpload({ onFileSelect, disabled }: FileUploadProps) {
         onDrop={handleDrop}
         onClick={() => !disabled && inputRef.current?.click()}
         className={cn(
-          "group relative cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center transition-all",
+          "group relative cursor-pointer overflow-hidden border border-dashed px-8 py-14 text-center transition duration-300",
           isDragging
-            ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20"
-            : "border-zinc-300 hover:border-emerald-400 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:border-emerald-600 dark:hover:bg-zinc-900/50",
+            ? "border-pine bg-pine/8"
+            : "border-line bg-surface-raised/60 hover:border-pine/50 hover:bg-surface-raised",
           disabled && "pointer-events-none opacity-50"
         )}
       >
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 h-px origin-left bg-ember transition-transform duration-500",
+            isDragging ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          )}
+        />
+
         <input
           ref={inputRef}
           type="file"
@@ -81,39 +87,34 @@ export function FileUpload({ onFileSelect, disabled }: FileUploadProps) {
           disabled={disabled}
         />
 
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 transition group-hover:scale-105 dark:bg-emerald-900/40 dark:text-emerald-400">
-          <Upload className="h-8 w-8" />
-        </div>
-
-        <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-moss">
+          Drop zone
+        </p>
+        <h3 className="mt-3 font-display text-2xl font-medium tracking-tight text-ink sm:text-3xl">
           Drop your CSV here
         </h3>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          or click to browse — supports any column layout
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted">
+          Or click to browse. Facebook leads, Google Ads exports, Excel dumps —
+          any column layout works.
         </p>
-        <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
-          Facebook leads, Google Ads, Excel exports, CRM dumps & more
+        <p className="mt-5 font-mono text-[11px] tracking-wide text-muted/80">
+          .csv · max 10MB
         </p>
       </div>
 
       {error && (
-        <p className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
+        <p className="border border-danger/30 bg-danger-soft px-4 py-2.5 text-sm text-danger">
           {error}
         </p>
       )}
 
       {selectedFile && (
-        <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-700 dark:bg-zinc-900">
-          <div className="flex items-center gap-3">
-            <FileSpreadsheet className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            <div>
-              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {selectedFile.name}
-              </p>
-              <p className="text-xs text-zinc-500">
-                {(selectedFile.size / 1024).toFixed(1)} KB
-              </p>
-            </div>
+        <div className="flex items-center justify-between border border-line bg-surface-raised px-4 py-3">
+          <div>
+            <p className="text-sm font-medium text-ink">{selectedFile.name}</p>
+            <p className="mt-0.5 font-mono text-[11px] text-muted">
+              {(selectedFile.size / 1024).toFixed(1)} KB
+            </p>
           </div>
           <button
             type="button"
@@ -121,9 +122,9 @@ export function FileUpload({ onFileSelect, disabled }: FileUploadProps) {
               e.stopPropagation();
               clearFile();
             }}
-            className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted transition hover:text-ink"
           >
-            <X className="h-4 w-4" />
+            Clear
           </button>
         </div>
       )}

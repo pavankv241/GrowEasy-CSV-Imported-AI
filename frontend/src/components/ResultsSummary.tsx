@@ -1,6 +1,5 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, SkipForward } from "lucide-react";
 import type { ImportResult } from "@/types/crm";
 import { DataTable } from "./DataTable";
 
@@ -41,34 +40,31 @@ export function ResultsSummary({ result, fileName }: ResultsSummaryProps) {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-4 sm:grid-cols-3">
-        <StatCard
-          icon={<CheckCircle2 className="h-5 w-5 text-emerald-600" />}
-          label="Total Imported"
+    <div className="space-y-10">
+      <dl className="grid grid-cols-3 gap-px border border-line bg-line">
+        <Stat
+          label="Imported"
           value={result.totalImported}
-          accent="emerald"
+          tone="pine"
         />
-        <StatCard
-          icon={<SkipForward className="h-5 w-5 text-amber-600" />}
-          label="Total Skipped"
+        <Stat
+          label="Skipped"
           value={result.totalSkipped}
-          accent="amber"
+          tone="warn"
         />
-        <StatCard
-          icon={<AlertCircle className="h-5 w-5 text-blue-600" />}
-          label="Total Processed"
+        <Stat
+          label="Processed"
           value={result.totalProcessed}
-          accent="blue"
+          tone="ink"
         />
-      </div>
+      </dl>
 
       <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-            Imported CRM Records
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h3 className="font-display text-xl font-medium text-ink">
+            Imported CRM records
           </h3>
-          <span className="text-xs text-zinc-500">{fileName}</span>
+          <span className="truncate font-mono text-[11px] text-muted">{fileName}</span>
         </div>
         <DataTable
           headers={[...CRM_HEADERS]}
@@ -79,8 +75,8 @@ export function ResultsSummary({ result, fileName }: ResultsSummaryProps) {
 
       {result.skipped.length > 0 && (
         <section>
-          <h3 className="mb-3 text-base font-semibold text-zinc-900 dark:text-zinc-100">
-            Skipped Records
+          <h3 className="mb-4 font-display text-xl font-medium text-ink">
+            Skipped records
           </h3>
           <DataTable
             headers={skippedHeaders}
@@ -93,32 +89,30 @@ export function ResultsSummary({ result, fileName }: ResultsSummaryProps) {
   );
 }
 
-function StatCard({
-  icon,
+function Stat({
   label,
   value,
-  accent,
+  tone,
 }: {
-  icon: React.ReactNode;
   label: string;
   value: number;
-  accent: "emerald" | "amber" | "blue";
+  tone: "pine" | "warn" | "ink";
 }) {
-  const bgMap = {
-    emerald: "bg-emerald-50 dark:bg-emerald-950/30",
-    amber: "bg-amber-50 dark:bg-amber-950/30",
-    blue: "bg-blue-50 dark:bg-blue-950/30",
-  };
+  const valueClass =
+    tone === "pine"
+      ? "text-pine"
+      : tone === "warn"
+        ? "text-warn"
+        : "text-ink";
 
   return (
-    <div
-      className={`rounded-xl border border-zinc-200 p-5 dark:border-zinc-700 ${bgMap[accent]}`}
-    >
-      <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-        {icon}
+    <div className="bg-surface-raised px-4 py-5 sm:px-6">
+      <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
         {label}
-      </div>
-      <p className="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-50">{value}</p>
+      </dt>
+      <dd className={`mt-2 font-display text-4xl font-semibold tracking-tight ${valueClass}`}>
+        {value}
+      </dd>
     </div>
   );
 }

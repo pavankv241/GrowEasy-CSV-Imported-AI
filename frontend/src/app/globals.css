@@ -3,45 +3,170 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fafafa;
-  --foreground: #18181b;
+  --background: #ece7df;
+  --foreground: #1a1a17;
+  --surface: #f7f3ec;
+  --surface-raised: #fffdf8;
+  --ink: #14261f;
+  --pine: #1f4d3a;
+  --pine-deep: #143528;
+  --moss: #3d6b54;
+  --ember: #c45c26;
+  --ember-deep: #a3481a;
+  --muted: #6b655c;
+  --line: #d4cdc2;
+  --danger: #b42318;
+  --danger-soft: #fce8e6;
+  --warn: #9a6700;
+  --warn-soft: #fff4d6;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #121512;
+  --foreground: #ebe6dc;
+  --surface: #1a1f1c;
+  --surface-raised: #222926;
+  --ink: #ebe6dc;
+  --pine: #7eb89a;
+  --pine-deep: #9dcfb4;
+  --moss: #5f8f76;
+  --ember: #e8915a;
+  --ember-deep: #f0a878;
+  --muted: #9a948a;
+  --line: #2f3833;
+  --danger: #f97066;
+  --danger-soft: #3a1c1a;
+  --warn: #f5c84c;
+  --warn-soft: #3a3218;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-pine: var(--pine);
+  --color-pine-deep: var(--pine-deep);
+  --color-moss: var(--moss);
+  --color-ember: var(--ember);
+  --color-ember-deep: var(--ember-deep);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), ui-serif, Georgia, serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pulse-bar {
+  0%,
+  100% {
+    transform: translateX(-40%);
+    opacity: 0.55;
   }
   50% {
-    transform: translateX(200%);
+    transform: translateX(140%);
+    opacity: 1;
   }
+}
+
+@keyframes soft-breathe {
+  0%,
   100% {
-    transform: translateX(-100%);
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.ge-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(31, 77, 58, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 0%, rgba(196, 92, 38, 0.08), transparent 50%),
+    linear-gradient(165deg, #ece7df 0%, #e4ebe4 48%, #e8e2d8 100%);
+  position: relative;
+}
+
+.dark .ge-shell {
+  background:
+    radial-gradient(ellipse 70% 45% at 15% -5%, rgba(126, 184, 154, 0.1), transparent 50%),
+    radial-gradient(ellipse 50% 35% at 95% 5%, rgba(232, 145, 90, 0.06), transparent 45%),
+    linear-gradient(165deg, #121512 0%, #161b18 55%, #141210 100%);
+}
+
+.ge-shell::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black, transparent);
+  z-index: 0;
+}
+
+.dark .ge-shell::before {
+  opacity: 0.18;
+}
+
+.ge-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.animate-rise {
+  animation: rise-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-rise-delay {
+  animation: rise-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.animate-rise-delay-2 {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.animate-draw {
+  transform-origin: left;
+  animation: draw-line 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #a1a1aa transparent;
-}
-
-.dark * {
-  scrollbar-color: #52525b transparent;
+  scrollbar-color: var(--moss) transparent;
 }
