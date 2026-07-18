@@ -108,14 +108,11 @@ function ImporterApp() {
         {step === "upload" && (
           <section className="mx-auto max-w-2xl pt-6 sm:pt-12">
             <div className="mb-10 text-center">
-              <p className="animate-rise font-mono text-[11px] uppercase tracking-[0.22em] text-moss">
-                Lead import tool
-              </p>
-              <h1 className="animate-rise-delay mt-4 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
-                GrowEasy
+              <h1 className="animate-rise font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+                Import your CSV
               </h1>
               <div className="mx-auto mt-5 h-px w-24 origin-center scale-x-100 bg-ember animate-draw" />
-              <p className="animate-rise-delay-2 mx-auto mt-6 max-w-md text-base leading-relaxed text-muted">
+              <p className="animate-rise-delay mx-auto mt-6 max-w-md text-base leading-relaxed text-muted">
                 Drop any spreadsheet. AI maps columns to your CRM lead fields —
                 then you confirm before anything is imported.
               </p>
@@ -179,7 +176,7 @@ function ImporterApp() {
                   Import complete
                 </h2>
                 <p className="mt-2 text-sm text-muted">
-                  Mapped CRM records ready for GrowEasy
+                  Mapped CRM records ready for import
                 </p>
               </div>
               <button
@@ -196,7 +193,7 @@ function ImporterApp() {
       </main>
 
       <footer className="border-t border-line/70 py-5 text-center font-mono text-[11px] tracking-[0.12em] text-muted">
-        GrowEasy · CSV Importer
+        CSV Importer
       </footer>
     </div>
   );

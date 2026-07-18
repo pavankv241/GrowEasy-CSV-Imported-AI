@@ -23,9 +23,9 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GrowEasy CSV Importer",
+  title: "CSV Importer",
   description:
-    "Map any CSV format to GrowEasy CRM lead fields with AI-assisted extraction.",
+    "Map any CSV format to CRM lead fields with AI-assisted extraction.",
 };
 
 export default function RootLayout({

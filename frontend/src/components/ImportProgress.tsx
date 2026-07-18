@@ -5,7 +5,7 @@ interface ImportProgressProps {
 }
 
 export function ImportProgress({
-  message = "Mapping your CSV columns to GrowEasy CRM fields…",
+  message = "Mapping your CSV columns to CRM fields…",
 }: ImportProgressProps) {
   return (
     <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-20 text-center animate-rise">
